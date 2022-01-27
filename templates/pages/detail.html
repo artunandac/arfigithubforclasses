@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card-header text-white">
+                <h1>Çıktı:</h1>
+            </div>
+            <div class="card-body">
+                <input type="text" value={{ text }} id="myInput" class="form-control">
+
+                <!-- The button used to copy the text -->
+                <button onclick="myFunction()" class="btn btn-primary btn-block">Mesajı Kopyala</button>
+            </div>
+            <script>
+            function myFunction(txt) {
+                /* Get the text field */
+                var copyText = document.getElementById("myInput");
+                /* window.alert(copyText) */
+              
+                /* Select the text field */
+                copyText.select();
+                copyText.setSelectionRange(0, 99999); /*For mobile devices */
+              
+                 /* Copy the text inside the text field */
+                navigator.clipboard.writeText(copyText.value);
+              
+                /* Alert the copied text */
+                alert("Mesajınız Kopyalandı");
+              }</script>
+    </div>
+    </div>
+
+{% endblock %}
