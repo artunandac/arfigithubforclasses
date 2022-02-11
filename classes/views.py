@@ -23,13 +23,41 @@ siniflar = {'gXh{Kb':'9A',
             'Xsc':'10B',
             'Xse':'10C',
             'Xsg':'10D',
-            'Xsj':'10E',
+            'Xsj':'10E'
             }
+
 
 def writeerrorstotxt(sinif,isim, hatalianahtar, hatalimetin):
     date = datetime.now()
     with open("BULUNANHATALAR.txt","a", encoding="utf-8") as file:
-        file.write(siniflar[sinif]+' '+isim+' '+ str(hatalianahtar)+' '+ hatalimetin+' '+ date.strftime("%A, %d. %B %Y %I:%M%p")+ '\n')        
+        file.write(siniflar[sinif]+' '+isim+' '+ str(hatalianahtar)+' '+ hatalimetin+' '+ date.strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
+
+def decrypt(sifrelenmiskelime,decryptedkelime, sinif, anahtar):
+    for i in range(0, len(sifrelenmiskelime)):
+        decryptedkelime += list(decryptedlist.keys())[list(decryptedlist.values()).index(sifrelenmiskelime[i])]  
+    print(decryptedkelime)
+        # writeencryptionstotxt(sinif, anahtar, decryptedkelime)
+    print('writeencrpyptionstotxt')
+    date = datetime.now()
+    with open("YAPILAN ISLEMLER","a", encoding="utf-8") as file: # siniflar[sinif]+"islemleri.txt"
+        file.write(siniflar[sinif]+' '+ str(anahtar)+' '+ decryptedkelime+' '+ date.strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
+    
+
+def encrypt(sifrelenecekkelime,encryptedkelime, sinif, anahtar):
+    for i in range(0, len(sifrelenecekkelime)):
+                        # print(type(encryptedkelime))
+                        (encryptedkelime) += str(encryptedlist[sifrelenecekkelime[i]]) 
+
+    print(encryptedkelime)
+    date = datetime.now()
+    with open("YAPILAN ISLEMLER.txt","a", encoding="utf-8") as file: # siniflar[sinif]+"islemleri.txt"
+        file.write(siniflar[sinif]+' '+ str(anahtar)+' '+ decryptedkelime+' '+ date.strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
+  
+def writeencryptionstotxt(sinif, anahtar, metin):
+    print('writeencrpyptionstotxt')
+    date = datetime.now()
+    with open("YAPILAN ISLEMLER.txt","a", encoding="utf-8") as file: # siniflar[sinif]+"islemleri.txt"
+        file.write(siniflar[sinif]+' '+ str(anahtar)+' '+ metin+' '+ date.strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
         
 def writelogstotxt(sinif,pagename):
     date = datetime.now()
@@ -103,19 +131,14 @@ def index(request, sinif):
                 
                 if sifrelenmiskelime!='':
                     print('sifrecözmebaslıyor')
-                    for i in range(0, len(sifrelenmiskelime)):
-                        decryptedkelime += list(decryptedlist.keys())[list(decryptedlist.values()).index(sifrelenmiskelime[i])]  
-                    print(decryptedkelime)
+                    decrypt(sifrelenmiskelime,decryptedkelime, sinif, anahtar)
                     context = {'text': decryptedkelime}
                     print(context)
                     return render(request, 'pages/detail.html', context)
                 elif sifrelenecekkelime!='':
                     print('sifrelemebaslıyor')
-                    for i in range(0, len(sifrelenecekkelime)):
-                        print(type(encryptedkelime))
-                        (encryptedkelime) += str(encryptedlist[sifrelenecekkelime[i]]) 
-
-                    print(encryptedkelime)
+                    encrypt(sifrelenecekkelime,encryptedkelime, sinif, anahtar)
+                    writeencryptionstotxt(sinif, anahtar, encryptedkelime)
                     context = {'text': encryptedkelime}
                     print(context)
                     return render(request, 'pages/detail.html', context)
@@ -135,7 +158,7 @@ def index(request, sinif):
 #     return render(request, 'pages/classhata.html')
 def hatabildir(request, sinif):
     if sinif in list(siniflar.keys()):
-        writelogstotxt(sinif,'INDEX')
+        writelogstotxt(sinif,'HATA BILDIR')
         if request.method == 'POST':
             hatalianahtar = int(request.POST['hatalianahtar'])
             isim  = str(request.POST['isim'])
